@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MyApp — CyberDev Studio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+    :root{
+      --bg1: #0a0f1c;
+      --bg2: #1e1b33;
+      --neon1: #00f6ff;
+      --neon2: #ff4aff;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at 10% 10%, var(--bg2), var(--bg1));
+      color: #f0f0f0;
+      overflow-x:hidden;
+    }
+
+    /* Header */
+    header#site-header{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      transition:all .35s;
+      background:transparent;
+      z-index:1000;
+    }
+    header#site-header.compact{
+      background: rgba(6,6,10,0.6);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      height:64px;
+    }
+
+    .header-left{
+      display:flex;align-items:center;gap:10px;
+      transform:translateY(-6px);
+      opacity:0;
+      transition:all .35s cubic-bezier(.2,.9,.2,1);
+    }
+    header#site-header.compact .header-left{ transform:translateY(0); opacity:1; }
+    .header-left img{ width:40px;height:40px;border-radius:8px;object-fit:cover; }
+    .brand-title{ font-weight:700; font-size:18px; color:var(--neon2); }
+
+    nav{ display:flex; gap:18px; }
+    nav a{ color:#fff; text-decoration:none; font-weight:600; transition:.2s; }
+    nav a:hover{ color:var(--neon1); }
+
+    /* Hero */
+    .hero{
+      height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    }
+    .hero .logo{ width:160px;height:160px;margin-bottom:18px; }
+    .hero .logo img{ width:100%;height:100%;object-fit:cover;border-radius:16px; }
+    .hero h1{ font-size:64px; margin:0; font-weight:800; background:linear-gradient(90deg,var(--neon2),var(--neon1));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero p{ max-width:700px; margin-top:12px; font-size:18px; color:#ccc; }
+
+    /* Content */
+    .content{ padding:80px 20px; max-width:1000px; margin:0 auto; }
+    .content h2{ color:var(--neon2); font-size:28px; margin-bottom:18px; }
+    .content p{ line-height:1.6; margin-bottom:20px; }
+
+    .download-buttons{
+      margin:40px 0; display:flex; gap:20px; flex-wrap:wrap;
+    }
+    .download-buttons a{
+      padding:12px 24px;
+      border-radius:30px;
+      background:var(--neon1);
+      color:#0a0f1c;
+      font-weight:700;
+      text-decoration:none;
+      transition:.3s;
+    }
+    .download-buttons a:hover{ background:#00c2b8; }
+
+    footer{ padding:30px; text-align:center; color:#888; }
+
+    /* Анимация появления карточек */
+    .fade-in{ opacity:0; transform:translateY(36px); transition:.6s; }
+    .fade-in.show{ opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+  <header id="site-header">
+    <div class="header-left" id="headerBrand">
+      <img src="image.jpg" alt="Лого">
+      <div class="brand-title">CyberDev</div>
+    </div>
+    <nav>
+      <a href="Index.html">Главная</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="logo"><img src="image.jpg" alt="MyApp"></div>
+    <h1>MyApp</h1>
+    <p>Приложение, которое меняет правила игры. В стиле киберпанк и с современным функционалом.</p>
+  </section>
+
+  <section class="content fade-in">
+    <h2>Описание</h2>
+    <p>MyApp — это революционное приложение для вашего устройства. Оно сочетает стиль, удобство и передовые технологии.</p>
+
+    <h2>Особенности</h2>
+    <ul>
+      <li>⚡ Быстродействие</li>
+      <li>🔒 Безопасность</li>
+      <li>🎨 Современный интерфейс</li>
+    </ul>
+
+    <div class="download-buttons">
+      <a href="image.jpg" download="MyApp_Windows.jpg">Скачать для Windows</a>
+      <a href="image.jpg" download="MyApp_Android.jpg">Скачать для Android</a>
+    </div>
+  </section>
+
+  <footer id="contacts">
+    &copy; 2025 CyberDev Studio — все права защищены.
+  </footer>
+
+  <script>
+    const header = document.getElementById('site-header');
+    const SCROLL_TRIGGER = Math.max(120, window.innerHeight * 0.25);
+
+    function onScroll() {
+      if (window.scrollY > SCROLL_TRIGGER) {
+        header.classList.add('compact');
+      } else {
+        header.classList.remove('compact');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+
+    // Анимации появления блоков
+    const appearObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('show');
+          appearObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.fade-in').forEach(n => appearObserver.observe(n));
+  </script>
+</body>
+</html>
